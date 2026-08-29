@@ -38,15 +38,15 @@ export default function Signin() {
         `${import.meta.env.VITE_SERVER_URL}/api/auth/signin`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "include",
           body: JSON.stringify({
             email: normalizedEmail,
             password,
           }),
-        }
+        },
       );
 
       let data;
@@ -62,34 +62,20 @@ export default function Signin() {
          * If your backend returns a specific status/message
          * for an unverified account, handle it here.
          */
-        if (
-          response.status === 403 &&
-          data.code === "EMAIL_NOT_VERIFIED"
-        ) {
-          localStorage.setItem(
-            "emailVerification",
-            normalizedEmail
-          );
+        if (response.status === 403 && data.code === "EMAIL_NOT_VERIFIED") {
+          localStorage.setItem("emailVerification", normalizedEmail);
 
-          setError(
-            data.message ||
-              "Your email has not been verified yet."
-          );
+          setError(data.message || "Your email has not been verified yet.");
 
           return;
         }
 
-        setError(
-          data.message ||
-            "Invalid email or password."
-        );
+        setError(data.message || "Invalid email or password.");
 
         return;
       }
 
-      setMessage(
-        data.message || "Signed in successfully."
-      );
+      setMessage(data.message || "Signed in successfully.");
 
       /*
        * The backend should set the HTTP-only cookies.
@@ -104,8 +90,7 @@ export default function Signin() {
       console.error("Signin error:", error);
 
       setError(
-        error.message ||
-          "Unable to connect to the server. Please try again."
+        error.message || "Unable to connect to the server. Please try again.",
       );
     } finally {
       setLoading(false);
@@ -119,13 +104,10 @@ export default function Signin() {
       <main className="min-h-[calc(100vh-4rem)] bg-gray-50 px-5 py-10 sm:px-6 sm:py-14 lg:px-8">
         <div className="mx-auto flex min-h-[calc(100vh-9rem)] max-w-md items-center justify-center">
           <div className="w-full">
-
             {/* Card */}
             <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
-
               {/* Heading */}
               <div className="mb-7 text-center">
-
                 <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-violet-600 text-lg font-bold text-white shadow-sm">
                   A
                 </div>
@@ -160,7 +142,6 @@ export default function Signin() {
               )}
 
               <form onSubmit={handleSignin} noValidate>
-
                 {/* Email */}
                 <div>
                   <label
@@ -187,7 +168,6 @@ export default function Signin() {
 
                 {/* Password */}
                 <div className="mt-5">
-
                   <div className="mb-1.5 flex items-center justify-between">
                     <label
                       htmlFor="password"
@@ -206,19 +186,13 @@ export default function Signin() {
 
                   <div className="relative">
                     <input
-                      type={
-                        showPassword
-                          ? "text"
-                          : "password"
-                      }
+                      type={showPassword ? "text" : "password"}
                       id="password"
                       name="password"
                       autoComplete="current-password"
                       placeholder="Enter your password"
                       value={password}
-                      onChange={(e) =>
-                        setPassword(e.target.value)
-                      }
+                      onChange={(e) => setPassword(e.target.value)}
                       disabled={loading}
                       required
                       className="w-full rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 pr-20 text-sm text-gray-950 outline-none transition placeholder:text-gray-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:cursor-not-allowed disabled:bg-gray-100"
@@ -226,21 +200,13 @@ export default function Signin() {
 
                     <button
                       type="button"
-                      onClick={() =>
-                        setShowPassword(
-                          (prev) => !prev
-                        )
-                      }
+                      onClick={() => setShowPassword((prev) => !prev)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-gray-500 transition hover:text-gray-900 focus:outline-none"
                       aria-label={
-                        showPassword
-                          ? "Hide password"
-                          : "Show password"
+                        showPassword ? "Hide password" : "Show password"
                       }
                     >
-                      {showPassword
-                        ? "Hide"
-                        : "Show"}
+                      {showPassword ? "Hide" : "Show"}
                     </button>
                   </div>
                 </div>
@@ -296,7 +262,6 @@ export default function Signin() {
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4Z"
                         />
                       </svg>
-
                       Signing in...
                     </>
                   ) : (
@@ -319,8 +284,8 @@ export default function Signin() {
 
             {/* Footer note */}
             <p className="mt-5 text-center text-xs leading-5 text-gray-400">
-              Your account security matters. Never share your
-              password with anyone.
+              Your account security matters. Never share your password with
+              anyone.
             </p>
           </div>
         </div>
