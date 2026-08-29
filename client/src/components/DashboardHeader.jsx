@@ -19,7 +19,7 @@ export default function DashboardHeader() {
         {
           method: "GET",
           credentials: "include",
-        }
+        },
       );
 
       const data = await response.json();
@@ -54,11 +54,11 @@ export default function DashboardHeader() {
   const handleLogout = async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/auth/logout`,
+        `${import.meta.env.VITE_SERVER_URL}/api/auth/sign-out`,
         {
           method: "POST",
           credentials: "include",
-        }
+        },
       );
 
       if (response.ok) {
@@ -71,14 +71,9 @@ export default function DashboardHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/95 backdrop-blur">
-
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-7 lg:px-8">
-
         {/* Logo */}
-        <Link
-          to="/dashboard"
-          className="flex items-center gap-2"
-        >
+        <Link to="/dashboard" className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-600 text-sm font-bold text-white shadow-sm">
             A
           </div>
@@ -90,7 +85,6 @@ export default function DashboardHeader() {
 
         {/* Right side */}
         <div className="flex items-center gap-2 sm:gap-4">
-
           {/* Notification */}
           <button
             type="button"
@@ -117,7 +111,6 @@ export default function DashboardHeader() {
 
           {/* User */}
           <div className="relative">
-
             <button
               type="button"
               onClick={() => setShowMenu((prev) => !prev)}
@@ -125,33 +118,28 @@ export default function DashboardHeader() {
               aria-label="Open user menu"
               aria-expanded={showMenu}
             >
-
               {/* Avatar */}
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-violet-100 text-xs font-bold text-violet-700">
                 {loading
                   ? "..."
                   : user
-                  ? `${user.fname?.charAt(0) || ""}${user.lname?.charAt(0) || ""}`
-                  : "?"}
+                    ? `${user.fname?.charAt(0) || ""}${user.lname?.charAt(0) || ""}`
+                    : "?"}
               </div>
 
               {/* Name */}
               <div className="hidden text-left sm:block">
-
                 <p className="max-w-32 truncate text-sm font-semibold text-gray-900">
                   {loading
                     ? "Loading..."
                     : user
-                    ? `${user.fname} ${user.lname}`
-                    : "User"}
+                      ? `${user.fname} ${user.lname}`
+                      : "User"}
                 </p>
 
                 <p className="max-w-32 truncate text-xs text-gray-500">
-                  {loading
-                    ? "..."
-                    : user?.email || ""}
+                  {loading ? "..." : user?.email || ""}
                 </p>
-
               </div>
 
               {/* Chevron */}
@@ -171,31 +159,24 @@ export default function DashboardHeader() {
                   d="m6 9 6 6 6-6"
                 />
               </svg>
-
             </button>
 
             {/* Dropdown */}
             {showMenu && (
               <div className="absolute right-0 mt-2 w-64 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg">
-
                 {/* User info */}
                 <div className="border-b border-gray-100 px-4 py-4">
-
                   <p className="truncate text-sm font-semibold text-gray-900">
-                    {user
-                      ? `${user.fname} ${user.lname}`
-                      : "User"}
+                    {user ? `${user.fname} ${user.lname}` : "User"}
                   </p>
 
                   <p className="mt-1 truncate text-xs text-gray-500">
                     {user?.email}
                   </p>
-
                 </div>
 
                 {/* Links */}
                 <div className="p-2">
-
                   <Link
                     to="/profile"
                     onClick={() => setShowMenu(false)}
@@ -215,7 +196,6 @@ export default function DashboardHeader() {
                         d="M15.75 6.75a3.75 3.75 0 1 1-7.5 0ZM4.5 20.25a7.5 7.5 0 0 1 15 0"
                       />
                     </svg>
-
                     Profile
                   </Link>
 
@@ -238,7 +218,6 @@ export default function DashboardHeader() {
                         d="M12 3 5 6v5c0 4.5 3 8.5 7 10 4-1.5 7-5.5 7-10V6l-7-3Z"
                       />
                     </svg>
-
                     Security
                   </Link>
 
@@ -261,15 +240,12 @@ export default function DashboardHeader() {
                         d="M10.5 6h10.5M3 6h3m0 0a2 2 0 1 0 4 0m-4 0a2 2 1 1 4 0M3 12h10.5m3 0H21m-4.5 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0M3 18h3m3 0h12m-9 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0"
                       />
                     </svg>
-
                     Settings
                   </Link>
-
                 </div>
 
                 {/* Logout */}
                 <div className="border-t border-gray-100 p-2">
-
                   <button
                     type="button"
                     onClick={handleLogout}
@@ -289,15 +265,11 @@ export default function DashboardHeader() {
                         d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6A2.25 2.25 0 0 0 5.25 5.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3-3H9m0 0 3-3m-3 3 3 3"
                       />
                     </svg>
-
                     Sign out
                   </button>
-
                 </div>
-
               </div>
             )}
-
           </div>
         </div>
       </div>
@@ -308,7 +280,6 @@ export default function DashboardHeader() {
           {error}
         </div>
       )}
-
     </header>
   );
 }

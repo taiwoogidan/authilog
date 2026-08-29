@@ -307,24 +307,110 @@ export const forgetPassword = async (req, res) => {
 export const resetPassword = async (req, res) => {
   try {
     let { otp, email, password } = req.body;
+
+    // Normalize email and OTP
+    email = email?.trim().toLowerCase();
+    otp = otp?.trim();
+
+    // Validate OTP
     if (!otp) {
       return res.status(400).json({
         success: false,
         message: "Please enter the 6-digit verification code.",
       });
     }
-    if (!password) {
+
+    if (!/^\d{6}$/.test(otp)) {
       return res.status(400).json({
         success: false,
-        message: "Password must be at least ddd8 characters.",
+        message: "Verification code must be 6 digits.",
       });
     }
+
+    // Validate email
     if (!email) {
       return res.status(400).json({
         success: false,
-        message: "Email is required",
+        message: "Email is required.",
       });
     }
+
+    // Validate password
+    if (!password) {
+      return res.status(400).json({
+        success: false,
+        message: "Password is required.",
+      });
+    }
+
+    if (password.length < 8) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 8 characters.",
+      });
+    }
+
+    // Get OTP from Redis
+    const storedOTP = await redisClient.get(`passwordReset:${email}`);
+
+    if (!storedOTP) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or expired verification code.",
+      });
+    }
+
+    // Compare OTP
+    if (otp !== storedOTP) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid verification code.",
+      });
+    }
+
+    // Check that the user exists
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User does not exist.",
+      });
+    }
+
+    // Hash the new password
+    const hashedPassword = await argon2.hash(password);
+
+    // Update password
+    user.password = hashedPassword;
+
+    await user.save();
+
+    // Delete OTP so it cannot be reused
+    await redisClient.del(`passwordReset:${email}`);
+
+    return res.status(200).json({
+      success: true,
+      message: "Your password has been reset successfully.",
+    });
+  } catch (error) {
+    console.error("Reset password error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
+};
+
+export const signOut = async (req, res) => {
+  try {
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    res.status(200).json({
+      success: true,
+      message: "Sign out successful",
+    });
   } catch (error) {
     console.error(error);
   }

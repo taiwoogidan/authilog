@@ -16,8 +16,7 @@ export default function PasswordReset() {
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] =
-    useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const passwordRequirements = [
     {
@@ -38,9 +37,7 @@ export default function PasswordReset() {
     },
     {
       label: "Special character",
-      valid: /[!@#$%^&*(),.?":{}|<>_\-\\[\]/`~;'+=]/.test(
-        password
-      ),
+      valid: /[!@#$%^&*(),.?":{}|<>_\-\\[\]/`~;'+=]/.test(password),
     },
   ];
 
@@ -52,7 +49,7 @@ export default function PasswordReset() {
 
     if (!email) {
       setError(
-        "Password reset session not found. Please request a new reset code."
+        "Password reset session not found. Please request a new reset code.",
       );
       return;
     }
@@ -68,16 +65,12 @@ export default function PasswordReset() {
     }
 
     if (!/[a-z]/.test(password)) {
-      setError(
-        "Password must contain at least one lowercase letter."
-      );
+      setError("Password must contain at least one lowercase letter.");
       return;
     }
 
     if (!/[A-Z]/.test(password)) {
-      setError(
-        "Password must contain at least one uppercase letter."
-      );
+      setError("Password must contain at least one uppercase letter.");
       return;
     }
 
@@ -86,14 +79,8 @@ export default function PasswordReset() {
       return;
     }
 
-    if (
-      !/[!@#$%^&*(),.?":{}|<>_\-\\[\]/`~;'+=]/.test(
-        password
-      )
-    ) {
-      setError(
-        "Password must contain at least one special character."
-      );
+    if (!/[!@#$%^&*(),.?":{}|<>_\-\\[\]/`~;'+=]/.test(password)) {
+      setError("Password must contain at least one special character.");
       return;
     }
 
@@ -108,7 +95,7 @@ export default function PasswordReset() {
       const response = await fetch(
         `${import.meta.env.VITE_SERVER_URL}/api/auth/reset-password`,
         {
-          method: "POST",
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
@@ -117,7 +104,7 @@ export default function PasswordReset() {
             otp,
             password,
           }),
-        }
+        },
       );
 
       let data;
@@ -125,23 +112,17 @@ export default function PasswordReset() {
       try {
         data = await response.json();
       } catch {
-        throw new Error(
-          "Something went wrong. Please try again."
-        );
+        throw new Error("Something went wrong. Please try again.");
       }
 
       if (!response.ok) {
         setError(
-          data.message ||
-            "Unable to reset your password. Please try again."
+          data.message || "Unable to reset your password. Please try again.",
         );
         return;
       }
 
-      setMessage(
-        data.message ||
-          "Your password has been reset successfully."
-      );
+      setMessage(data.message || "Your password has been reset successfully.");
 
       // Remove the temporary email after successful reset
       localStorage.removeItem("passwordResetEmail");
@@ -154,8 +135,7 @@ export default function PasswordReset() {
       console.error("Password reset error:", error);
 
       setError(
-        error.message ||
-          "Unable to connect to the server. Please try again."
+        error.message || "Unable to connect to the server. Please try again.",
       );
     } finally {
       setLoading(false);
@@ -169,13 +149,10 @@ export default function PasswordReset() {
       <main className="min-h-[calc(100vh-4rem)] bg-gray-50 px-5 py-10 sm:px-6 sm:py-14 lg:px-8">
         <div className="mx-auto flex min-h-[calc(100vh-9rem)] max-w-md items-center justify-center">
           <div className="w-full">
-
             {/* Card */}
             <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
-
               {/* Heading */}
               <div className="mb-7 text-center">
-
                 <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-violet-600 text-lg font-bold text-white shadow-sm">
                   A
                 </div>
@@ -185,8 +162,8 @@ export default function PasswordReset() {
                 </h1>
 
                 <p className="mt-2 text-sm leading-6 text-gray-500">
-                  Enter the verification code we sent to your
-                  email and create a new password.
+                  Enter the verification code we sent to your email and create a
+                  new password.
                 </p>
 
                 {email && (
@@ -216,11 +193,7 @@ export default function PasswordReset() {
                 </div>
               )}
 
-              <form
-                onSubmit={handleResetPassword}
-                noValidate
-              >
-
+              <form onSubmit={handleResetPassword} noValidate>
                 {/* OTP */}
                 <div>
                   <label
@@ -268,11 +241,7 @@ export default function PasswordReset() {
 
                   <div className="relative">
                     <input
-                      type={
-                        showPassword
-                          ? "text"
-                          : "password"
-                      }
+                      type={showPassword ? "text" : "password"}
                       id="password"
                       name="password"
                       autoComplete="new-password"
@@ -289,11 +258,7 @@ export default function PasswordReset() {
 
                     <button
                       type="button"
-                      onClick={() =>
-                        setShowPassword(
-                          (prev) => !prev
-                        )
-                      }
+                      onClick={() => setShowPassword((prev) => !prev)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-gray-500 transition hover:text-gray-900 focus:outline-none"
                     >
                       {showPassword ? "Hide" : "Show"}
@@ -302,26 +267,20 @@ export default function PasswordReset() {
 
                   {/* Password requirements */}
                   <div className="mt-3 grid grid-cols-2 gap-2">
-                    {passwordRequirements.map(
-                      (requirement) => (
-                        <div
-                          key={requirement.label}
-                          className={`flex items-center gap-2 text-xs ${
-                            requirement.valid
-                              ? "text-green-600"
-                              : "text-gray-400"
-                          }`}
-                        >
-                          <span className="text-sm">
-                            {requirement.valid
-                              ? "✓"
-                              : "○"}
-                          </span>
+                    {passwordRequirements.map((requirement) => (
+                      <div
+                        key={requirement.label}
+                        className={`flex items-center gap-2 text-xs ${
+                          requirement.valid ? "text-green-600" : "text-gray-400"
+                        }`}
+                      >
+                        <span className="text-sm">
+                          {requirement.valid ? "✓" : "○"}
+                        </span>
 
-                          {requirement.label}
-                        </div>
-                      )
-                    )}
+                        {requirement.label}
+                      </div>
+                    ))}
                   </div>
                 </div>
 
@@ -336,20 +295,14 @@ export default function PasswordReset() {
 
                   <div className="relative">
                     <input
-                      type={
-                        showConfirmPassword
-                          ? "text"
-                          : "password"
-                      }
+                      type={showConfirmPassword ? "text" : "password"}
                       id="confirmPassword"
                       name="confirmPassword"
                       autoComplete="new-password"
                       placeholder="Confirm your new password"
                       value={confirmPassword}
                       onChange={(e) => {
-                        setConfirmPassword(
-                          e.target.value
-                        );
+                        setConfirmPassword(e.target.value);
                         setError("");
                       }}
                       disabled={loading}
@@ -359,16 +312,10 @@ export default function PasswordReset() {
 
                     <button
                       type="button"
-                      onClick={() =>
-                        setShowConfirmPassword(
-                          (prev) => !prev
-                        )
-                      }
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-gray-500 transition hover:text-gray-900 focus:outline-none"
+                      onClick={() => setShowConfirmPassword((prev) => !prev)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-gray-500 transition hover:text-gray-900 focus:outline-none cursor-pointer"
                     >
-                      {showConfirmPassword
-                        ? "Hide"
-                        : "Show"}
+                      {showConfirmPassword ? "Hide" : "Show"}
                     </button>
                   </div>
                 </div>
@@ -377,7 +324,7 @@ export default function PasswordReset() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="mt-7 flex w-full items-center justify-center rounded-lg bg-violet-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
+                  className="mt-7 flex w-full items-center justify-center rounded-lg bg-violet-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70 cursor-pointer"
                 >
                   {loading ? (
                     <>
@@ -402,7 +349,6 @@ export default function PasswordReset() {
                           d="M4 12a8 8 0 0 0-8-8v4a4 4 0 0 1 4 4h4Z"
                         />
                       </svg>
-
                       Resetting password...
                     </>
                   ) : (
@@ -421,15 +367,13 @@ export default function PasswordReset() {
                   Sign in
                 </Link>
               </p>
-
             </div>
 
             {/* Security note */}
             <p className="mt-5 text-center text-xs leading-5 text-gray-400">
-              Your verification code expires after a short period
-              of time. Never share your code with anyone.
+              Your verification code expires after a short period of time. Never
+              share your code with anyone.
             </p>
-
           </div>
         </div>
       </main>
